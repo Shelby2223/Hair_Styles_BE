@@ -3,27 +3,23 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class user_register extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
-    protected $primaryKey = 'user_id';
+    use HasFactory;
+    protected $table = 'user_register';
+    protected $primaryKey = 'user_register_id';
     public $incrementing = true;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        'user_name',
-        'user_email',
-        'user_password',
-        'user_phone',
-        'user_address',
+        'user_register_name',
+        'user_register_email',
+        'user_register_password',
+        'user_register_phone',
+        'user_register_address',
+        'user_register_type',
+        'user_register_otp',
     ];
 
     /**
@@ -32,7 +28,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
+        'user_register_password',
         'remember_token',
     ];
 

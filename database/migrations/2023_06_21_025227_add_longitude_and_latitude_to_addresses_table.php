@@ -11,15 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('addresses', function (Blueprint $table) {
-            $table->increments('address_id');
-            $table->unsignedInteger('shop_id');
-            $table->string('address');
+        Schema::table('addresses', function (Blueprint $table) {
             $table->decimal('longitude', 10, 7)->nullable();
             $table->decimal('latitude', 10, 7)->nullable();
-            $table->timestamps();
-
-            $table->foreign('shop_id')->references('shop_id')->on('shops');
         });
     }
 
@@ -28,5 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('addresses', function (Blueprint $table) {
+            //
+        });
     }
 };
