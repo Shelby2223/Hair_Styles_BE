@@ -119,4 +119,23 @@ class AuthController extends Controller
                 ->subject('OTP Verification');
         });
     }
+    public function login(Request $request)
+    {
+        // get data from api to compare
+        $credentials = $request->only('input_email', 'input_password');
+
+        // Kiểm tra thông tin đăng nhập
+        $user = User::where('user_email', $credentials['input_email'])->first();
+
+        if (!$user || !Hash::check($credentials['input_password'], $user->user_password)) {
+            // Thông tin đăng nhập không chính xác
+            return response()->json(['message' => 'Thông tin đăng nhập không chính xác'], 401);
+        }
+        return response()->json(['message' => true]);
+    }
+    public function getUsers()
+    {
+        $users = User::all();
+        return response()->json($users);
+    }
 }
