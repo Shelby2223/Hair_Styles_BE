@@ -4,7 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ShopController;
-
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\HistorisController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,6 +28,15 @@ Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/users', [AuthController::class, 'getUsers']);
 
+
+// Tam
+Route::get('/users', [UsersController::class, 'getUsers']);
+Route::get('users/{users_id}',[UsersController::class, 'getUsersId']);
+
+
+//Histories
+Route::get('/Histories', [HistorisController::class, 'getHistory']);    
+Route::get('/Historis', [HistorisController::class, 'show']);
 
 // Shops
 Route::get('/shops', [ShopController::class, 'index']);

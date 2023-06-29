@@ -138,4 +138,10 @@ class AuthController extends Controller
         $users = User::all();
         return response()->json($users);
     }
+    
+    public function getUsersId()
+    {
+        $users = User::all();
+        return response()->json($users);
+    }
 }
