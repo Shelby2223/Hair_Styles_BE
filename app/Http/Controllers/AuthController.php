@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Session;
 use App\Models\user_register;
 
 class AuthController extends Controller
@@ -14,125 +16,99 @@ class AuthController extends Controller
     public function register(Request $request)
     {
 
-        // Xóa hết dữ liệu cũ trong bảng user_register
-        user_register::truncate();
-
         // Lấy giá trị từ request
         $user_register_name = $request->input('user_name');
-        $user_register_phone = $request->input('user_phone');
-        $user_register_address = $request->input('user_address');
         $user_register_email = $request->input('user_email');
-        $user_register_password = Hash::make($request->input('user_password'));
-
-        // Tạo một đối tượng user_register và gán các giá trị từ request vào các thuộc tính tương ứng
-        $user_register = new user_register();
-        $user_register->user_register_name = $user_register_name;
-        $user_register->user_register_phone = $user_register_phone;
-        $user_register->user_register_address = $user_register_address;
-        $user_register->user_register_email = $user_register_email;
-        $user_register->user_register_password = $user_register_password;
-
-        // Lưu đối tượng user_register vào cơ sở dữ liệu
-        $user_register->save();
-
         // Tạo mã OTP
         $otpCode = mt_rand(100000, 999999);
+        // Tạo một đối tượng user và gán các giá trị từ request vào các thuộc tính tương ứng
+        $user = new user();
+        $user->user_name = $request->input('user_name');
+        $user->user_phone = $request->input('user_phone');
+        $user->user_address = $request->input('user_address');
+        $user->user_email = $request->input('user_email');
+        $user->user_password = $otpCode;
 
-        // Lưu mã OTP vào user_register
-        $user_register->user_register_otp =  $otpCode;
-
-        // Lưu đối tượng user_register vào cơ sở dữ liệu
-        $user_register->save();
+        // Lưu đối tượng user vào cơ sở dữ liệu
+        $user->save();
 
         // Gửi mã OTP qua email
         $this->sendOtpEmail($user_register_email, $otpCode, $user_register_name);
 
-        // Lấy tất cả dữ liệu từ bảng user_register
-        $userData = user_register::all();
-
         return response()->json([
-            'userData' => $userData,
             'message' => 'Registration successful. Please check your email for the OTP.'
         ]);
     }
 
 
-    // Xác minh mã opt có đúng không
-    public function verifyOtp(Request $request)
-    {
-        // Lấy giá trị OTP từ db
-        $user_register = user_register::first();
-        $otpFromdb = $user_register->user_register_otp;
-
-        // Lấy giá trị OTP từ request gửi từ ReactJS qua API
-        // $otpFromRequest = intval($request->input('otp_code'));
-
-        $otpFromRequest = $request->input('otp_code');
-
-
-        // if (isset($otpFromdb)) {
-
-        //     return response()->json([
-        //         'otpdb' => $otpFromdb,
-        //         'otpinput' => $otpFromRequest
-        //     ]);
-        // }
-        // So sánh giá trị OTP
-        if ($otpFromRequest == $otpFromdb) {
-            // OTP đúng, tiếp tục quá trình đăng ký
-
-            // Lấy thông tin đăng ký từ bảng user_register
-            $user_register = user_register::first();
-
-            // Tạo một đối tượng User mới và gán các thuộc tính từ user_register
-            $user = new User();
-            $user->user_name = $user_register->user_register_name;
-            $user->user_email = $user_register->user_register_email;
-            $user->user_password = $user_register->user_register_password;
-            $user->user_phone = $user_register->user_register_phone;
-            $user->user_address = $user_register->user_register_address;
-            // Gán các thuộc tính khác từ user_register vào đối tượng User
-
-            // Lưu đối tượng User vào bảng users
-            $user->save();
-
-            // Xóa dữ liệu trong bảng user_register
-            user_register::truncate();
-
-            // Gửi thông báo xác minh OTP thành công và biến thành công là true về ReactJS qua API
-            return response()->json(['success' => true]);
-        } else {
-            // OTP sai, hiển thị thông báo lỗi
-
-            // Trả về thông báo lỗi xác minh OTP
-            return response()->json(['success' => 'Invalid OTP. Please try again.']);
-        }
-    }
-
-
     private function sendOtpEmail($email, $otpCode, $name)
     {
-        $messageContent = "Welcome " . $name . "♥\nYour OTP: " . $otpCode;
+        $messageContent = "Welcome " . $name . "♥\nYour Password: " . $otpCode;
 
         Mail::raw($messageContent, function ($message) use ($email) {
             $message->to($email)
                 ->subject('OTP Verification');
         });
     }
+
+    // Xác minh mã opt có đúng không
+    public function verifyOtp(Request $request)
+    {
+        // $otpFromRequest = intval($request->input('input_password'));
+        $input_password = $request->input('input_password');
+        $input_email = $request->input('user_email');
+
+        $user = User::where('user_email', $input_email)->first();
+
+        $hashedPassword = $user->user_password; // Mật khẩu đã được mã hóa trong cơ sở dữ liệu
+
+        if ($hashedPassword == $input_password) {
+            // Cập nhật trường 'is_user' thành true
+            $user->is_user = true;
+            $user->save();
+            // OTP đúng, cập nhật trạng thái thành công
+            // Gửi thông báo xác minh OTP thành công và biến thành công là true về ReactJS qua API
+            return response()->json([
+                'success' => true,
+            ]);
+        } else {
+            // OTP đúng, nhưng cập nhật trạng thái thất bại
+            // Xử lý lỗi nếu cần
+            return response()->json([
+                'success' => false,
+            ]);
+        }
+    }
+
     public function login(Request $request)
     {
-        // get data from api to compare
         $credentials = $request->only('input_email', 'input_password');
 
-        // Kiểm tra thông tin đăng nhập
-        $user = User::where('user_email', $credentials['input_email'])->first();
+        // Lấy người theo có cùng địa chỉ email
+        $users = User::where('user_email', $credentials['input_email'])->get();
 
-        if (!$user || !Hash::check($credentials['input_password'], $user->user_password)) {
-            // Thông tin đăng nhập không chính xác
-            return response()->json(['message' => 'Thông tin đăng nhập không chính xác'], 401);
+        $authenticated = false;
+
+        // Kiểm tra mật khẩu cho từng người dùng
+        foreach ($users as $user) {
+            if ($credentials['input_password'] == $user->user_password && $user->is_user==true) {
+                $authenticated = true;
+                break;
+            }
         }
+        if (!$authenticated) {
+            // Thông tin đăng nhập không chính xác
+            return response()->json(
+                [
+                    'message' => false,
+                ]
+            );
+        }
+
         return response()->json(['message' => true]);
     }
+
+
     public function getUsers()
     {
         $users = User::all();
