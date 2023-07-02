@@ -7,6 +7,8 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\HistorisController;
 use App\Http\Controllers\PaymentsController;
+use App\Http\Controllers\RatingsController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -46,7 +48,12 @@ Route::get('/Historis', [HistorisController::class, 'show']);
 
 Route::get('/payments/{user_id}', [PaymentsController::class,'getPaymentsByUserId']);
 
-  
+Route::get('/get-payments',[PaymentsController::class,'getPayments']);
+Route::get('/get-payment',[PaymentsController::class,'getPayment']);
+
+//ratings
+Route::get('/delete-ratings/{rating_id}', [RatingsController::class,'deleteRatings']);
+Route::get('/get-ratings',[RatingsController::class,'getRatings']);
 
 // Shops
 Route::get('/shops', [ShopController::class, 'index']);
@@ -54,6 +61,8 @@ Route::get('shops/{shop_id}',[ShopController::class, 'show']);
 Route::post('shops', [ShopController::class, 'store']);
 Route::put('shops/{id}', [ShopController::class, 'update']);
 Route::delete('shops/{id}', [ShopController::class, 'destroy']);
+
+
 
 // // Services
 // Route::get('services', 'API\ServiceController@index');
@@ -82,6 +91,7 @@ Route::delete('shops/{id}', [ShopController::class, 'destroy']);
 // Route::post('ratings', 'API\RatingController@store');
 // Route::put('ratings/{id}', 'API\RatingController@update');
 // Route::delete('ratings/{id}', 'API\RatingController@destroy');
+
 
 // // Histories
 // Route::get('histories', 'API\HistoryController@index');
