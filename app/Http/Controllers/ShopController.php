@@ -37,6 +37,7 @@ class ShopController extends Controller
             'shop_name' => 'required',
             'shop_phone' => 'required',
             'user_id' => 'required',
+          
         ]);
 
         $shop = shops::findOrFail($id);

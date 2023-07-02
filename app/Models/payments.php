@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class payments extends Model
 {
     use HasFactory;
+    protected $table = "payments";
+    protected $primaryKey = 'payment_id'; // Tên cột khóa chính
 }
