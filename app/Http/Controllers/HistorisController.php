@@ -25,9 +25,6 @@ class HistorisController extends Controller
 
         $shop = shops::find($histori->shop_id);
         $service = services::find($histori->service_id);
-
-
-
         $result[] = [
             'history_id' => $histori->history_id,
             'user_id' => $histori->user_id,
@@ -39,8 +36,8 @@ class HistorisController extends Controller
             'appointment_time' => $histori->appointment_time,
             'created_at' => $histori->created_at,
             'updated_at' => $histori->updated_at,
-            'shop_name' => $shop->name, // Lấy tên của cửa hàng
-            'service_name' => $service->name // Lấy tên của dịch vụ
+            'shop_name' =>$shop->shop_name, // Lấy tên của cửa hàng
+            'service_name' =>$service->service_name // Lấy tên của dịch vụ
         ];
     }
 
