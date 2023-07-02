@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\HistorisController;
+use App\Http\Controllers\PaymentsController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -29,14 +30,23 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/users', [AuthController::class, 'getUsers']);
 
 
-// Tam
-Route::get('/users', [UsersController::class, 'getUsers']);
-Route::get('users/{users_id}',[UsersController::class, 'getUsersId']);
+// users
+Route::get('/users', [UsersController::class,'getUsers']);
+Route::get('/users/{users_id}',[UsersController::class,'getUsersId']);
+Route::put('/users/{id}', [UsersController::class,'update']);
+
 
 
 //Histories
 Route::get('/Histories', [HistorisController::class, 'getHistory']);    
 Route::get('/Historis', [HistorisController::class, 'show']);
+
+//payments
+
+
+Route::get('/payments/{user_id}', [PaymentsController::class,'getPaymentsByUserId']);
+
+  
 
 // Shops
 Route::get('/shops', [ShopController::class, 'index']);
