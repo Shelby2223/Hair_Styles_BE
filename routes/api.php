@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ShopController;
-
+use App\Http\Controllers\APIController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -30,7 +30,7 @@ Route::get('/users', [AuthController::class, 'getUsers']);
 
 // Shops
 Route::get('/shops', [ShopController::class, 'index']);
-Route::get('shops/{shop_id}',[ShopController::class, 'show']);
+Route::get('shops/{shop_id}', [ShopController::class, 'show']);
 Route::post('shops', [ShopController::class, 'store']);
 Route::put('shops/{id}', [ShopController::class, 'update']);
 Route::delete('shops/{id}', [ShopController::class, 'destroy']);
@@ -69,5 +69,60 @@ Route::delete('shops/{id}', [ShopController::class, 'destroy']);
 // Route::post('histories', 'API\HistoryController@store');
 // Route::put('histories/{id}', 'API\HistoryController@update');
 // Route::delete('histories/{id}', 'API\HistoryController@destroy');
+
+
+use GuzzleHttp\Client;
+
+// routes/api.php
+
+//Search
+Route::post('/getdistance', [APIController::class, 'calculateDistance']);
+Route::post('/getallShop', [APIController::class, 'allShop']);
+
+Route::post('/getratingstar', [APIController::class, 'caculateRatingStar']);
+Route::get('/shops', [APIController::class, 'search']);
+
+
+// Route::get('/get-coordinates', function () {
+//     $location = '99 Tô Hiến Thành, Phước Mỹ, Sơn Trà, Đà Nẵng 550000, Việt Nam'; // Địa điểm cần chuyển đổi
+//     $apiKey = 'pk.eyJ1IjoiaG9hbmIyNCIsImEiOiJjbGpnamV4bXowNmFtM2xxaWZnYnEwaWQ4In0.aSnV4rCTGUxjMMEXOnA9iQ';
+
+//     $client = new Client();
+//     $response = $client->get('https://api.mapbox.com/geocoding/v5/mapbox.places/' . urlencode($location) . '.json', [
+//         'query' => [
+//             'access_token' => $apiKey,
+//         ],
+//     ]);
+
+//     $data = json_decode($response->getBody(), true);
+//     $coordinates = $data['features'][0]['center']; // Mảng [longitude, latitude]
+
+//     return $coordinates;
+// });
+
+
+
+
+// Route::get('/get-coordinates', function (Request $request) {
+//     $address = $request->input('address', 'Phước Mỹ, Sơn Trà, Đà Nẵng');
+//     $apiKey = 'pk.eyJ1IjoiaG9hbmIyNCIsImEiOiJjbGpnamV4bXowNmFtM2xxaWZnYnEwaWQ4In0.aSnV4rCTGUxjMMEXOnA9iQ';
+//     $client = new Client();
+
+//     $response = $client->get('https://maps.googleapis.com/maps/api/geocode/json', [
+//         'query' => [
+//             'address' => $address,
+//             'key' => $apiKey,
+//         ],
+//     ]);
+
+//     $data = json_decode($response->getBody(), true);
+
+//     if (isset($data['results'][0]['geometry']['location'])) {
+//         $coordinates = $data['results'][0]['geometry']['location'];
+//         return $coordinates;
+//     }
+
+//     return response()->json(['error' => 'Address not found'], 404);
+// });
 
 
