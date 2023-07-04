@@ -23,11 +23,15 @@ use App\Http\Controllers\RatingsController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+// register
 Route::post('/register', [AuthController::class, 'register']);
-
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 
+// forgot password
+Route::post('/forgot_password', [AuthController::class, 'forgotpassword']);
+Route::post('/verify_new_password', [AuthController::class, 'verifyNewPassword']);
+
+// Login
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/users', [AuthController::class, 'getUsers']);
 
