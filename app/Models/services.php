@@ -4,8 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Shop;
 
-class services extends Model
+class Service extends Model
 {
     use HasFactory;
+    protected $table = "services";
+    protected $primaryKey = 'service_id'; // Tên cột khóa chính
 }
+

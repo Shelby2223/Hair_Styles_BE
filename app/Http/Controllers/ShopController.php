@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Shop;
 use Illuminate\Http\Request;
-use App\Models\shops;
 
 class ShopController extends Controller
 {
     public function index()
     {
-        $shops = shops::all();
+        $shops = Shop::all();
         return response()->json($shops);
     }
 
     public function show($shop_id)
     {
-        $shop = shops::findOrFail($shop_id);
+        $shop = Shop::findOrFail($shop_id);
         return response()->json($shop);
     }
 
@@ -27,7 +27,7 @@ class ShopController extends Controller
             'user_id' => 'required',
         ]);
 
-        $shop = shops::create($validatedData);
+        $shop = Shop::create($validatedData);
         return response()->json($shop, 201);
     }
 
@@ -39,14 +39,14 @@ class ShopController extends Controller
             'user_id' => 'required',
         ]);
 
-        $shop = shops::findOrFail($id);
+        $shop = Shop::findOrFail($id);
         $shop->update($validatedData);
         return response()->json($shop);
     }
 
     public function destroy($id)
     {
-        $shop = shops::findOrFail($id);
+        $shop = Shop::findOrFail($id);
         $shop->delete();
         return response()->json('Shop deleted successfully');
     }

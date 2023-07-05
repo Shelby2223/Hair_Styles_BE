@@ -13,7 +13,7 @@ class HistorisController extends Controller
         $history = histories::all();
         return response()->json($history);
     }
-    
+
 
     public function show()
 {
@@ -47,5 +47,5 @@ class HistorisController extends Controller
     return response()->json($result);
 }
 
-  
+
 }

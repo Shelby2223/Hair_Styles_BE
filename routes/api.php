@@ -6,6 +6,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\HistorisController;
+use App\Http\Controllers\ComboController;
+use App\Http\Controllers\ServicesController;
+use App\Http\Controllers\ShopserviceController;
+use App\Http\Controllers\StylelistController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,7 +39,7 @@ Route::get('users/{users_id}',[UsersController::class, 'getUsersId']);
 
 
 //Histories
-Route::get('/Histories', [HistorisController::class, 'getHistory']);    
+Route::get('/Histories', [HistorisController::class, 'getHistory']);
 Route::get('/Historis', [HistorisController::class, 'show']);
 
 // Shops
@@ -45,19 +49,38 @@ Route::post('shops', [ShopController::class, 'store']);
 Route::put('shops/{id}', [ShopController::class, 'update']);
 Route::delete('shops/{id}', [ShopController::class, 'destroy']);
 
+// Combos
+Route::get('/combos',[ComboController::class,'index']);
+Route::get('combos/{shop_id}',[ComboController::class,'get_combos_shop_id']);
+Route::post('combos', [ComboController::class,'store']);
+Route::put('combos/{id}', [ComboController::class,'update']);
+Route::delete('combos/{id}',[ComboController::class,'destroy']);
+
+
+// Comboservices
+// Route::get('/shopservice',[ShopserviceController::class,'index']);
+// Route::get('/shopservice/{id}',[ShopserviceController::class,'index']);
+// Route::post('/shopservice', [ShopserviceController::class,'store']);
+// Route::put('/shopservice{id}', [ShopserviceController::class,'update']);
+// Route::delete('/shopservice{id}',[ShopserviceController::class,'destroy']);
+
+
+// Stylelist
+Route::get('/stylelist',[StylelistController::class,'index']);
+Route::get('/stylelist/{id}',[StylelistController::class,'index']);
+Route::post('/stylelist', [StylelistController::class,'store']);
+Route::put('/stylelist/{id}', [StylelistController::class,'update']);
+Route::delete('/stylelist/{id}',[StylelistController::class,'destroy']);
+
+
 // // Services
 // Route::get('services', 'API\ServiceController@index');
-// Route::get('services/{id}', 'API\ServiceController@show');
+Route::get('/service_shop_id/{shop_id}',[ServicesController::class,'getServicesByShopId']);
 // Route::post('services', 'API\ServiceController@store');
 // Route::put('services/{id}', 'API\ServiceController@update');
 // Route::delete('services/{id}', 'API\ServiceController@destroy');
 
-// // Combos
-// Route::get('combos', 'API\ComboController@index');
-// Route::get('combos/{id}', 'API\ComboController@show');
-// Route::post('combos', 'API\ComboController@store');
-// Route::put('combos/{id}', 'API\ComboController@update');
-// Route::delete('combos/{id}', 'API\ComboController@destroy');
+
 
 // // Comments
 // Route::get('comments', 'API\CommentController@index');
