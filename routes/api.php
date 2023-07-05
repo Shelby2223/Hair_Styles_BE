@@ -40,6 +40,7 @@ Route::get('/users', [AuthController::class, 'getUsers']);
 Route::get('/users', [UsersController::class,'getUsers']);
 Route::get('/users/{users_id}',[UsersController::class,'getUsersId']);
 Route::put('/users/{id}', [UsersController::class,'update']);
+Route::get('/is_user', [UsersController::class,'getIsUser']);
 
 
 
@@ -65,6 +66,10 @@ Route::get('shops/{shop_id}',[ShopController::class, 'show']);
 Route::post('shops', [ShopController::class, 'store']);
 Route::put('shops/{id}', [ShopController::class, 'update']);
 Route::delete('shops/{id}', [ShopController::class, 'destroy']);
+
+// duyệt shop
+Route::get('/approve', [ShopController::class, 'getBaberShop']);
+Route::post('/approve/{shop_id}', [ShopController::class, 'BecomeShop']);
 
 
 

@@ -33,7 +33,10 @@ class UsersController extends Controller
         $users->update($validatedData);       
         return response()->json($users);
     }
-   
+   public function getIsUser(){
+    $users=User::where('is_user', 1)->get();
+    return response()->json($users);
+}
     
 
 
