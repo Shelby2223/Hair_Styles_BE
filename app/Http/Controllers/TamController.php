@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 
-class UsersController extends Controller
+class TamController extends Controller
 {
     public function getUsers()
     {
