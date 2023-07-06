@@ -10,9 +10,11 @@ class RatingsController extends Controller
     public function getRatings()
     {
         $ratings = ratings::join('shops', 'ratings.shop_id', '=', 'shops.shop_id')
-            ->join('users', 'ratings.user_id', '=', 'users.user_id')
-            ->select('ratings.*', 'shops.shop_name', 'shops.shop_image', 'users.user_name')
-            ->get();
+        ->join('users', 'ratings.user_id', '=', 'users.user_id')
+        ->where('shops.is_shop', 1)
+        ->select('ratings.*', 'shops.shop_name', 'shops.shop_image', 'users.user_name','users.user_email','shops.shop_phone','users.user_address')
+        ->get();
+    
 
         return response()->json($ratings);
     }

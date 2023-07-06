@@ -36,24 +36,7 @@ class UsersController extends Controller
         return response()->json($users);
     }
    
-    public function getByIsUser()
-    {
-        $users = DB::table('users')->where('is_user', 1)->get();
+    
 
-        return response()->json($users);
-    }
-    public function deleteUser($user_id)
-    {
-       
-        $user_id = User::where('user_id', $user_id)->first();
-
-        if (!$user_id) {
-            return response()->json(['status' => 'error', 'msg' => 'Product not found'], 404);
-        }
-
-        $user_id->delete();
-
-        return response()->json(['status' => 'ok', 'msg' => 'Delete successful']);
-    }
 
 }
