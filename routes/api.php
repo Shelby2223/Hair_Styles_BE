@@ -4,6 +4,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\HistorisController;
+use App\Http\Controllers\PaymentsController;
+use App\Http\Controllers\RatingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,14 +23,44 @@ use App\Http\Controllers\ShopController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+// register
 Route::post('/register', [AuthController::class, 'register']);
-
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 
+// forgot password
+Route::post('/forgot_password', [AuthController::class, 'forgotpassword']);
+Route::post('/verify_new_password', [AuthController::class, 'verifyNewPassword']);
+
+// Login
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/users', [AuthController::class, 'getUsers']);
 
+
+// users
+Route::get('/users', [UsersController::class,'getUsers']);
+Route::get('/users/{users_id}',[UsersController::class,'getUsersId']);
+Route::put('/users/{id}', [UsersController::class,'update']);
+Route::get('/is_user', [UsersController::class,'getIsUser']);
+
+Route::get('/is_user', [UsersController::class,'getByIsUser']);
+Route::get('/delete-users/{user_id}', [UsersController::class,'deleteUser']);
+
+
+//Histories
+Route::get('/Histories', [HistorisController::class, 'getHistory']);    
+Route::get('/Historis', [HistorisController::class, 'show']);
+
+//payments
+
+
+Route::get('/payments/{user_id}', [PaymentsController::class,'getPaymentsByUserId']);
+
+Route::get('/get-payments',[PaymentsController::class,'getPayments']);
+Route::get('/get-payment',[PaymentsController::class,'getPayment']);
+
+//ratings
+Route::get('/delete-ratings/{rating_id}', [RatingsController::class,'deleteRatings']);
+Route::get('/get-ratings',[RatingsController::class,'getRatings']);
 
 // Shops
 Route::get('/shops', [ShopController::class, 'index']);
@@ -34,6 +68,12 @@ Route::get('shops/{shop_id}',[ShopController::class, 'show']);
 Route::post('shops', [ShopController::class, 'store']);
 Route::put('shops/{id}', [ShopController::class, 'update']);
 Route::delete('shops/{id}', [ShopController::class, 'destroy']);
+
+// duyệt shop
+Route::get('/approve', [ShopController::class, 'getBaberShop']);
+Route::post('/approve/{shop_id}', [ShopController::class, 'BecomeShop']);
+
+
 
 // // Services
 // Route::get('services', 'API\ServiceController@index');
@@ -62,6 +102,7 @@ Route::delete('shops/{id}', [ShopController::class, 'destroy']);
 // Route::post('ratings', 'API\RatingController@store');
 // Route::put('ratings/{id}', 'API\RatingController@update');
 // Route::delete('ratings/{id}', 'API\RatingController@destroy');
+
 
 // // Histories
 // Route::get('histories', 'API\HistoryController@index');

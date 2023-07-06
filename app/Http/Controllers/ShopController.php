@@ -37,6 +37,7 @@ class ShopController extends Controller
             'shop_name' => 'required',
             'shop_phone' => 'required',
             'user_id' => 'required',
+
         ]);
 
         $shop = shops::findOrFail($id);
@@ -49,5 +50,32 @@ class ShopController extends Controller
         $shop = shops::findOrFail($id);
         $shop->delete();
         return response()->json('Shop deleted successfully');
+    }
+
+    // duyệt BarBer Shop
+    public function getBaberShop()
+    {
+
+        $shop = shops::join('users', 'shops.user_id', '=', 'users.user_id')
+        ->where('is_shop', 0)       
+        ->select('shops.*', 'shops.shop_name', 'shops.shop_image','shops.shop_name','users.user_address')
+        ->get();
+        return response()->json($shop);
+    }
+    public function BecomeShop($shop_id)
+    {
+        // Lấy thông tin của shop dựa trên shop_id
+        $shop = shops::find($shop_id);
+    
+        // Kiểm tra xem shop có tồn tại hay không
+        if (!$shop) {
+            return response()->json(['message' => 'Shop không tồn tại'], 404);
+        }
+    
+        // Cập nhật trường is_shop của shop thành 1
+        $shop->is_shop = 1;
+        $shop->save();
+    
+        return response()->json(['message' => 'Cập nhật is_shop thành công'], 200);
     }
 }

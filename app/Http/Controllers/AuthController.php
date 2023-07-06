@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Session;
 use App\Models\user_register;
 
 class AuthController extends Controller
@@ -82,29 +80,16 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        // get data from api to compare
         $credentials = $request->only('input_email', 'input_password');
 
-        // Lấy người theo có cùng địa chỉ email
-        $users = User::where('user_email', $credentials['input_email'])->get();
+        // Kiểm tra thông tin đăng nhập
+        $user = User::where('user_email', $credentials['input_email'])->first();
 
-        $authenticated = false;
-
-        // Kiểm tra mật khẩu cho từng người dùng
-        foreach ($users as $user) {
-            if ($credentials['input_password'] == $user->user_password && $user->is_user==true) {
-                $authenticated = true;
-                break;
-            }
-        }
-        if (!$authenticated) {
+        if (!$user || !Hash::check($credentials['input_password'], $user->user_password)) {
             // Thông tin đăng nhập không chính xác
-            return response()->json(
-                [
-                    'message' => false,
-                ]
-            );
+            return response()->json(['message' => 'Thông tin đăng nhập không chính xác'], 401);
         }
-
         return response()->json(['message' => true]);
     }
 
@@ -113,5 +98,70 @@ class AuthController extends Controller
     {
         $users = User::all();
         return response()->json($users);
+    }
+
+    public function forgotpassword(Request $request)
+    {
+
+        // Lấy giá trị từ request
+        $input_user_email = $request->input('input_email');
+        // Tạo mã OTP
+        $otp_new_password = mt_rand(100000, 999999);
+
+        // Lấy user_name ra từ db
+        $user = User::where('user_email', $input_user_email)->first();
+
+        if ($user) {
+            $user->user_password = $otp_new_password; // Cập nhật mật khẩu mới
+            $user->save(); // Lưu thay đổi vào cơ sở dữ liệu
+        }
+
+        $user_name_db = $user->user_name;
+
+        // Gửi mã OTP qua email
+        $this->sendOtpEmailPassword($input_user_email, $otp_new_password, $user_name_db);
+
+        return response()->json([
+            'message' => 'Registration successful. Please check your email for the OTP.'
+        ]);
+    }
+
+    private function sendOtpEmailPassword($email, $otp, $name)
+    {
+        $messageContent = "Welcome " . $name . "♥\nYour new Password: " . $otp;
+
+        Mail::raw($messageContent, function ($message) use ($email) {
+            $message->to($email)
+                ->subject('OTP Verification');
+        });
+    }
+
+    // Xác minh mã opt có đúng không
+    public function verifyNewPassword(Request $request)
+    {
+        // $otpFromRequest = intval($request->input('input_password'));
+        $input_password = $request->input('input_password');
+        $input_email = $request->input('input_email');
+
+        $user = User::where('user_email', $input_email)->first();
+
+        $hashedPassword = $user->user_password; // Mật khẩu đã được mã hóa trong cơ sở dữ liệu
+        $id_user = $user->user_id;
+
+        if ($hashedPassword == $input_password) {
+            // OTP đúng, cập nhật trạng thái thành công
+            // Gửi thông báo xác minh OTP thành công và biến thành công là true về ReactJS qua API
+            return response()->json([
+                'success' => true,
+                'id_user' => $id_user
+
+            ]);
+        } else {
+            // OTP đúng, nhưng cập nhật trạng thái thất bại
+            // Xử lý lỗi nếu cần
+            return response()->json([
+                'success' => false,
+            ]);
+        }
     }
 }

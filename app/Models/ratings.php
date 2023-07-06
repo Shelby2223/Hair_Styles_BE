@@ -8,4 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class ratings extends Model
 {
     use HasFactory;
+    
+    protected $table='ratings';
+    protected $primaryKey = 'rating_id';
+
+
+
+
+    public function users()
+    {
+        return $this->belongsTo(users::class);
+    }
+    public function Shops()
+    {
+        return $this->belongsTo(shops::class);
+    }   
 }

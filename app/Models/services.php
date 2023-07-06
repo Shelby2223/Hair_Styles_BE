@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class services extends Model
 {
     use HasFactory;
+    protected $table = "services";
+    protected $primaryKey = 'service_id'; // Tên cột khóa chính
 }
