@@ -5,7 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class combos extends Model
+class history extends Model
 {
     use HasFactory;
+    protected $table = "histories";
+    protected $primaryKey = 'history_id'; // Tên cột khóa chính
+    
+    
+
 }

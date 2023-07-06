@@ -1,13 +1,16 @@
 <?php
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\HistorisController;
+use App\Http\Controllers\NhatController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\RatingsController;
+use App\Http\Controllers\TamController;
+use App\Http\Controllers\TrungController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -23,48 +26,46 @@ use App\Http\Controllers\RatingsController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// TRUNG ĐẶNG
 // register
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
+Route::post('/register', [TrungController::class, 'register']);
+Route::post('/verify-otp', [TrungController::class, 'verifyOtp']);
 
 // forgot password
-Route::post('/forgot_password', [AuthController::class, 'forgotpassword']);
-Route::post('/verify_new_password', [AuthController::class, 'verifyNewPassword']);
+Route::post('/forgot_password', [TrungController::class, 'forgotpassword']);
+Route::post('/verify_new_password', [TrungController::class, 'verifyNewPassword']);
 
 // Login
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/users', [AuthController::class, 'getUsers']);
+Route::post('/login', [TrungController::class, 'login']);
+// lấy thông tin user.
+Route::get('/users', [TrungController::class, 'getUsers']);
 
 
+// VÕ THÀNH TÂM
 // users
-Route::get('/users', [UsersController::class,'getUsers']);
-Route::get('/users/{users_id}',[UsersController::class,'getUsersId']);
-Route::put('/users/{id}', [UsersController::class,'update']);
-Route::get('/is_user', [UsersController::class,'getIsUser']);
-
-Route::get('/is_user', [UsersController::class,'getByIsUser']);
-Route::get('/delete-users/{user_id}', [UsersController::class,'deleteUser']);
+Route::get('/users', [TamController::class, 'getUsers']);
+Route::get('/users/{users_id}', [TamController::class, 'getUsersId']);
+Route::put('/users/{id}', [TamController::class, 'update']);
 
 
-//Histories
-Route::get('/Histories', [HistorisController::class, 'getHistory']);    
-Route::get('/Historis', [HistorisController::class, 'show']);
+// PAHN ĐỨC THƠ
+Route::get('/is_user', [ThoController::class, 'getIsUser']);
+Route::put('/users/{id}', [ThoController::class, 'update']);
+
 
 //payments
-
-
-Route::get('/payments/{user_id}', [PaymentsController::class,'getPaymentsByUserId']);
-
-Route::get('/get-payments',[PaymentsController::class,'getPayments']);
-Route::get('/get-payment',[PaymentsController::class,'getPayment']);
+Route::get('/payments/{user_id}', [ThoController::class, 'getPaymentsByUserId']);
+Route::get('/get-payments', [ThoController::class, 'getPayments']);
+Route::get('/get-payment', [ThoController::class, 'getPayment']);
 
 //ratings
-Route::get('/delete-ratings/{rating_id}', [RatingsController::class,'deleteRatings']);
-Route::get('/get-ratings',[RatingsController::class,'getRatings']);
+Route::get('/delete-ratings/{rating_id}', [ThoController::class, 'deleteRatings']);
+Route::get('/get-ratings', [ThoController::class, 'getRatings']);
 
 // Shops
 Route::get('/shops', [ShopController::class, 'index']);
-Route::get('shops/{shop_id}',[ShopController::class, 'show']);
+Route::get('shops/{shop_id}', [ShopController::class, 'show']);
 Route::post('shops', [ShopController::class, 'store']);
 Route::put('shops/{id}', [ShopController::class, 'update']);
 Route::delete('shops/{id}', [ShopController::class, 'destroy']);
@@ -74,41 +75,24 @@ Route::get('/approve', [ShopController::class, 'getBaberShop']);
 Route::post('/approve/{shop_id}', [ShopController::class, 'BecomeShop']);
 
 
-
-// // Services
-// Route::get('services', 'API\ServiceController@index');
-// Route::get('services/{id}', 'API\ServiceController@show');
-// Route::post('services', 'API\ServiceController@store');
-// Route::put('services/{id}', 'API\ServiceController@update');
-// Route::delete('services/{id}', 'API\ServiceController@destroy');
-
-// // Combos
-// Route::get('combos', 'API\ComboController@index');
-// Route::get('combos/{id}', 'API\ComboController@show');
-// Route::post('combos', 'API\ComboController@store');
-// Route::put('combos/{id}', 'API\ComboController@update');
-// Route::delete('combos/{id}', 'API\ComboController@destroy');
-
-// // Comments
-// Route::get('comments', 'API\CommentController@index');
-// Route::get('comments/{id}', 'API\CommentController@show');
-// Route::post('comments', 'API\CommentController@store');
-// Route::put('comments/{id}', 'API\CommentController@update');
-// Route::delete('comments/{id}', 'API\CommentController@destroy');
-
-// // Ratings
-// Route::get('ratings', 'API\RatingController@index');
-// Route::get('ratings/{id}', 'API\RatingController@show');
-// Route::post('ratings', 'API\RatingController@store');
-// Route::put('ratings/{id}', 'API\RatingController@update');
-// Route::delete('ratings/{id}', 'API\RatingController@destroy');
+Route::get('/tho/payment-redirect', [VNPayController::class, 'momo_payment'])->name('payment.redirect');
 
 
-// // Histories
-// Route::get('histories', 'API\HistoryController@index');
-// Route::get('histories/{id}', 'API\HistoryController@show');
-// Route::post('histories', 'API\HistoryController@store');
-// Route::put('histories/{id}', 'API\HistoryController@update');
-// Route::delete('histories/{id}', 'API\HistoryController@destroy');
+// HOÀN BÙI
+//Booking
+Route::get('random-key', [BookingController::class, 'generateKey']);
+
+Route::get('/getservices', [BookingController::class, 'getShopServices']);
+
+Route::post('/bookingservices', [BookingController::class, 'booking']);
 
 
+Route::get('/getbookedstylists', [BookingController::class, 'checkStylistAvailability']);
+
+
+// NGUYỄN VĂN NHẬT 
+Route::get('/shops', [NhatController::class, 'getshops']);
+Route::get('/shops/{shop_id}',[NhatController::class, 'getShopbyShopId']);
+Route::get('/service_shop_id/{shop_id}',[NhatController::class,'getServicesByShopId']);
+Route::get('/style/{shop_id}',[NhatController::class ,'getStylelistByShopId']);
+Route::get('/combo/{shop_id}',[NhatController::class,'getComboByShopId']);
