@@ -1,15 +1,12 @@
 <?php
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ShopController;
-use App\Http\Controllers\UsersController;
-use App\Http\Controllers\HistorisController;
 use App\Http\Controllers\NhatController;
-use App\Http\Controllers\PaymentsController;
-use App\Http\Controllers\RatingsController;
 use App\Http\Controllers\TamController;
 use App\Http\Controllers\TrungController;
+use App\Http\Controllers\ThoController;
+use App\Http\Controllers\HoanController;
 
 
 /*
