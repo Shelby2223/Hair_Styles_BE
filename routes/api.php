@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -11,6 +10,7 @@ use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\RatingsController;
 use App\Http\Controllers\TamController;
 use App\Http\Controllers\TrungController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -50,16 +50,18 @@ Route::put('/users/{id}', [TamController::class, 'update']);
 
 
 // PAHN ĐỨC THƠ
-Route::get('/is_user', [TamController::class, 'getIsUser']);
+Route::get('/is_user', [ThoController::class, 'getIsUser']);
+Route::put('/users/{id}', [ThoController::class, 'update']);
+
 
 //payments
-Route::get('/payments/{user_id}', [PaymentsController::class, 'getPaymentsByUserId']);
-Route::get('/get-payments', [PaymentsController::class, 'getPayments']);
-Route::get('/get-payment', [PaymentsController::class, 'getPayment']);
+Route::get('/payments/{user_id}', [ThoController::class, 'getPaymentsByUserId']);
+Route::get('/get-payments', [ThoController::class, 'getPayments']);
+Route::get('/get-payment', [ThoController::class, 'getPayment']);
 
 //ratings
-Route::get('/delete-ratings/{rating_id}', [RatingsController::class, 'deleteRatings']);
-Route::get('/get-ratings', [RatingsController::class, 'getRatings']);
+Route::get('/delete-ratings/{rating_id}', [ThoController::class, 'deleteRatings']);
+Route::get('/get-ratings', [ThoController::class, 'getRatings']);
 
 // Shops
 Route::get('/shops', [ShopController::class, 'index']);
@@ -71,6 +73,9 @@ Route::delete('shops/{id}', [ShopController::class, 'destroy']);
 // duyệt shop
 Route::get('/approve', [ShopController::class, 'getBaberShop']);
 Route::post('/approve/{shop_id}', [ShopController::class, 'BecomeShop']);
+
+
+Route::get('/tho/payment-redirect', [VNPayController::class, 'momo_payment'])->name('payment.redirect');
 
 
 // HOÀN BÙI
