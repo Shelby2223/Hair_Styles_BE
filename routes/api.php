@@ -23,11 +23,15 @@ use App\Http\Controllers\RatingsController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+// register
 Route::post('/register', [AuthController::class, 'register']);
-
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 
+// forgot password
+Route::post('/forgot_password', [AuthController::class, 'forgotpassword']);
+Route::post('/verify_new_password', [AuthController::class, 'verifyNewPassword']);
+
+// Login
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/users', [AuthController::class, 'getUsers']);
 
@@ -36,6 +40,7 @@ Route::get('/users', [AuthController::class, 'getUsers']);
 Route::get('/users', [UsersController::class,'getUsers']);
 Route::get('/users/{users_id}',[UsersController::class,'getUsersId']);
 Route::put('/users/{id}', [UsersController::class,'update']);
+Route::get('/is_user', [UsersController::class,'getIsUser']);
 
 Route::get('/is_user', [UsersController::class,'getByIsUser']);
 Route::get('/delete-users/{user_id}', [UsersController::class,'deleteUser']);
@@ -63,6 +68,10 @@ Route::get('shops/{shop_id}',[ShopController::class, 'show']);
 Route::post('shops', [ShopController::class, 'store']);
 Route::put('shops/{id}', [ShopController::class, 'update']);
 Route::delete('shops/{id}', [ShopController::class, 'destroy']);
+
+// duyệt shop
+Route::get('/approve', [ShopController::class, 'getBaberShop']);
+Route::post('/approve/{shop_id}', [ShopController::class, 'BecomeShop']);
 
 
 
