@@ -5,21 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class shops extends Model
+class rating extends Model
 {
     use HasFactory;
-    protected $table = "shops";
-    protected $primaryKey = 'shop_id'; // Tên cột khóa chính
+    
+    protected $table='ratings';
+    protected $primaryKey = 'rating_id';
+
+
+
 
     public function users()
     {
         return $this->belongsTo(users::class);
     }
-    
-    public function ratings()
+    public function Shops()
     {
-    return $this->hasMany(ratings::class);
-    }
-
-
+        return $this->belongsTo(shops::class);
+    }   
 }
