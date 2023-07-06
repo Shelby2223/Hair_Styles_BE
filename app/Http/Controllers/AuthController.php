@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use App\Models\user_register;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -80,17 +81,47 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        // get data from api to compare
-        $credentials = $request->only('input_email', 'input_password');
+        $input_email = $request->input('input_email');
+        $input_password = $request->input('input_password');
+        // Lấy người theo có cùng địa chỉ email
+        $users = User::where('user_email', $input_email)->get();
 
-        // Kiểm tra thông tin đăng nhập
-        $user = User::where('user_email', $credentials['input_email'])->first();
+        $authenticated = false;
+        $authenticatedAdmin = false;
 
-        if (!$user || !Hash::check($credentials['input_password'], $user->user_password)) {
-            // Thông tin đăng nhập không chính xác
-            return response()->json(['message' => 'Thông tin đăng nhập không chính xác'], 401);
+
+        // Kiểm tra mật khẩu cho từng người dùng
+        foreach ($users as $user) {
+            $id_user = $user->user_id;
+            if ($input_password == $user->user_password && $user->is_user == true) {
+                $authenticated = true;
+                break;
+            } elseif ($input_password == $user->user_password && $user->is_admin == true) {
+                $authenticatedAdmin = true;
+            }
         }
-        return response()->json(['message' => true]);
+        if ($authenticated && !$authenticatedAdmin) {
+            // Thông tin đăng nhập không chính xác
+            return response()->json(
+                [
+                    'user' => true,
+                    'id_user' => $id_user
+
+                ]
+            );
+        }
+        if (!$authenticated && !$authenticatedAdmin) {
+            return response()->json(['user' => false]);
+        }
+        if (!$authenticated && $authenticatedAdmin) {
+            // Thông tin đăng nhập không chính xác
+            return response()->json(
+                [
+                    'admin' => true,
+                    'id_user' => $id_user
+                ]
+            );
+        }
     }
 
 
