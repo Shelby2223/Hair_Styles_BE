@@ -42,6 +42,8 @@ Route::get('/users/{users_id}',[UsersController::class,'getUsersId']);
 Route::put('/users/{id}', [UsersController::class,'update']);
 Route::get('/is_user', [UsersController::class,'getIsUser']);
 
+Route::get('/is_user', [UsersController::class,'getByIsUser']);
+Route::get('/delete-users/{user_id}', [UsersController::class,'deleteUser']);
 
 
 //Histories
