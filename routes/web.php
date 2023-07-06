@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,3 +15,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('/abc', function () {
     return view('welcome');
 });
+

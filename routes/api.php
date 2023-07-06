@@ -8,6 +8,8 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\HistorisController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\RatingsController;
+use App\Http\Controllers\VNPayController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +72,9 @@ Route::delete('shops/{id}', [ShopController::class, 'destroy']);
 // duyệt shop
 Route::get('/approve', [ShopController::class, 'getBaberShop']);
 Route::post('/approve/{shop_id}', [ShopController::class, 'BecomeShop']);
+
+
+Route::get('/tho/payment-redirect', [VNPayController::class, 'momo_payment'])->name('payment.redirect');
 
 
 
