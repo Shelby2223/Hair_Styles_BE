@@ -7,6 +7,10 @@ use App\Models\rating;
 use App\Models\payment;
 use App\Models\shop;
 use App\Models\User;
+use App\Models\address;
+
+
+use Illuminate\Support\Facades\Auth;
 
 
 use Illuminate\Support\Facades\DB;
@@ -15,6 +19,75 @@ use Illuminate\Support\Facades\DB;
 
 class ThoController extends Controller
 {
+    public function getShopsByUserId($userId)
+{
+    // Lấy dữ liệu từ database sử dụng Eloquent hoặc Query Builder
+    $shops = Shop::where('user_id', $userId)->get();
+
+    // Trả về dữ liệu dưới dạng JSON
+    return response()->json($shops);
+}
+    
+    // register to become to barbershop
+    public function addShop(Request $request)
+    {
+        try {
+            // Lấy dữ liệu từ request
+            $shopName = $request->input('shop_name');
+            $shopEmail = $request->input('shop_email');
+            $shopImage = $request->input('shop_image');
+            $shopPhone = $request->input('shop_phone');
+            $userid=$request-> input('user_id');
+    
+            // Tạo một đối tượng Shop mới
+            $newShop = new shop();
+            $newShop->shop_name = $shopName;
+            $newShop->shop_email = $shopEmail;
+            $newShop->shop_image = $shopImage;
+            $newShop->shop_phone = $shopPhone;
+            $newShop->is_shop="0";
+            $newShop->user_id=$userid;
+            
+    
+            // Lưu đối tượng Shop vào cơ sở dữ liệu
+            $newShop->save();
+    
+            // Trả về phản hồi thành công
+            return response()->json(['message' => 'Thêm shop thành công'], 200);
+        } catch (\Exception $e) {
+            dd($e);
+            // Xử lý lỗi nếu có
+            return response()->json(['error' => 'Đã xảy ra lỗi'], 500);
+        }
+    }
+    public function addAddress(Request $request)
+    {
+        try {
+            $shop = Shop::latest()->first();
+            $shopId = $shop->shop_id;
+            // Lấy dữ liệu từ request
+            $latitude = $request->input('latitude');
+            $longitude = $request->input('longitude');
+            $address=$request->input('address');
+
+            // Tạo một đối tượng Address mới
+            $newAddress = new address();
+            $newAddress->latitude = $latitude;
+            $newAddress->longitude = $longitude;
+            $newAddress->address=$address;
+            $newAddress->shop_id=$shopId;
+
+            // Lưu đối tượng Address vào cơ sở dữ liệu
+            $newAddress->save();
+
+            // Trả về phản hồi thành công
+            return response()->json(['message' => 'Đã thêm địa chỉ thành công'], 200);
+        } catch (\Exception $e) {
+            // Xử lý lỗi nếu có
+            return response()->json(['error' => 'Đã xảy ra lỗi'], 500);
+        }
+    }
+    
 
 
     // Ratings
@@ -51,6 +124,7 @@ class ThoController extends Controller
 
         return response()->json($payments);
     }
+    
     public function getPayments()
     {
         $payments = payment::join('shops', 'payments.shop_id', '=', 'shops.shop_id')

@@ -64,12 +64,17 @@ Route::get('/get-ratings', [ThoController::class, 'getRatings']);
 Route::get('/shops', [ShopController::class, 'index']);
 Route::get('shops/{shop_id}', [ShopController::class, 'show']);
 Route::post('shops', [ShopController::class, 'store']);
-Route::put('shops/{id}', [ShopController::class, 'update']);
-Route::delete('shops/{id}', [ShopController::class, 'destroy']);
+Route::put('shops/{id}', [ThoController::class, 'update']);
+Route::delete('shops/{id}', [ThoController::class, 'destroy']);
 
 // duyệt shop
-Route::get('/approve', [ShopController::class, 'getBaberShop']);
-Route::post('/approve/{shop_id}', [ShopController::class, 'BecomeShop']);
+Route::post('/add-shop', [ThoController::class, 'addShop']);
+Route::post('/add-address', [ThoController::class, 'addAddress']);
+Route::get('/shops-by-users/{user_id}',[ThoController::class, 'getShopsByUserId']);
+
+
+Route::get('/approve', [ThoController::class, 'getBaberShop']);
+Route::post('/approve/{shop_id}', [ThoController::class, 'BecomeShop']);
 
 
 Route::get('/tho/payment-redirect', [VNPayController::class, 'momo_payment'])->name('payment.redirect');
