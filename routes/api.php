@@ -1,9 +1,17 @@
 <?php
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\HistorisController;
+use App\Http\Controllers\NhatController;
+use App\Http\Controllers\PaymentsController;
+use App\Http\Controllers\RatingsController;
+use App\Http\Controllers\TamController;
+use App\Http\Controllers\TrungController;
+
+use App\Http\Controllers\HoanController;
 
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\SearchController;
@@ -22,69 +30,79 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/register', [AuthController::class, 'register']);
+// TRUNG ĐẶNG
+// register
+Route::post('/register', [TrungController::class, 'register']);
+Route::post('/verify-otp', [TrungController::class, 'verifyOtp']);
 
-Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
+// forgot password
+Route::post('/forgot_password', [TrungController::class, 'forgotpassword']);
+Route::post('/verify_new_password', [TrungController::class, 'verifyNewPassword']);
 
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/users', [AuthController::class, 'getUsers']);
+// Login
+Route::post('/login', [TrungController::class, 'login']);
+// lấy thông tin user.
+Route::get('/users', [TrungController::class, 'getUsers']);
 
+
+// VÕ THÀNH TÂM
+// users
+Route::get('/users', [TamController::class, 'getUsers']);
+Route::get('/users/{users_id}', [TamController::class, 'getUsersId']);
+Route::put('/users/{id}', [TamController::class, 'update']);
+
+
+// PAHN ĐỨC THƠ
+Route::get('/is_user', [ThoController::class, 'getIsUser']);
+Route::put('/users/{id}', [ThoController::class, 'update']);
+
+
+//payments
+Route::get('/payments/{user_id}', [ThoController::class, 'getPaymentsByUserId']);
+Route::get('/get-payments', [ThoController::class, 'getPayments']);
+Route::get('/get-payment', [ThoController::class, 'getPayment']);
+
+//ratings
+Route::get('/delete-ratings/{rating_id}', [ThoController::class, 'deleteRatings']);
+Route::get('/get-ratings', [ThoController::class, 'getRatings']);
 
 // Shops
 Route::get('/shops', [ShopController::class, 'index']);
-Route::get('shops/{shop_id}',[ShopController::class, 'show']);
+Route::get('shops/{shop_id}', [ShopController::class, 'show']);
 Route::post('shops', [ShopController::class, 'store']);
 Route::put('shops/{id}', [ShopController::class, 'update']);
 Route::delete('shops/{id}', [ShopController::class, 'destroy']);
 
-// // Services
-// Route::get('services', 'API\ServiceController@index');
-// Route::get('services/{id}', 'API\ServiceController@show');
-// Route::post('services', 'API\ServiceController@store');
-// Route::put('services/{id}', 'API\ServiceController@update');
-// Route::delete('services/{id}', 'API\ServiceController@destroy');
-
-// // Combos
-// Route::get('combos', 'API\ComboController@index');
-// Route::get('combos/{id}', 'API\ComboController@show');
-// Route::post('combos', 'API\ComboController@store');
-// Route::put('combos/{id}', 'API\ComboController@update');
-// Route::delete('combos/{id}', 'API\ComboController@destroy');
-
-// // Comments
-// Route::get('comments', 'API\CommentController@index');
-// Route::get('comments/{id}', 'API\CommentController@show');
-// Route::post('comments', 'API\CommentController@store');
-// Route::put('comments/{id}', 'API\CommentController@update');
-// Route::delete('comments/{id}', 'API\CommentController@destroy');
-
-// // Ratings
-// Route::get('ratings', 'API\RatingController@index');
-// Route::get('ratings/{id}', 'API\RatingController@show');
-// Route::post('ratings', 'API\RatingController@store');
-// Route::put('ratings/{id}', 'API\RatingController@update');
-// Route::delete('ratings/{id}', 'API\RatingController@destroy');
-
-// // Histories
-// Route::get('histories', 'API\HistoryController@index');
-// Route::get('histories/{id}', 'API\HistoryController@show');
-// Route::post('histories', 'API\HistoryController@store');
-// Route::put('histories/{id}', 'API\HistoryController@update');
-// Route::delete('histories/{id}', 'API\HistoryController@destroy');
+// duyệt shop
+Route::get('/approve', [ShopController::class, 'getBaberShop']);
+Route::post('/approve/{shop_id}', [ShopController::class, 'BecomeShop']);
 
 
+Route::get('/tho/payment-redirect', [VNPayController::class, 'momo_payment'])->name('payment.redirect');
+
+
+// HOÀN BÙI
 
 //Booking
-Route::get('random-key', [BookingController::class, 'generateKey']);
-Route::get('/getservices',[BookingController::class, 'getShopServices']);
-Route::post('/bookingservices',[BookingController::class, 'booking']);
-Route::post('/getbookedstylists', [BookingController::class, 'checkStylistAvailability']);
+Route::get('random-key', [HoanController::class, 'generateKey']);
+Route::get('/getservices',[HoanController::class, 'getShopServices']);
+Route::post('/bookingservices',[HoanController::class, 'booking']);
+Route::post('/getbookedstylists', [HoanController::class, 'checkStylistAvailability']);
 
 
 
 //Search
-Route::post('/getdistance', [SearchController::class, 'calculateDistance']);
-Route::get('/getallShop', [SearchController::class, 'allShop']);
-Route::post('/getratingstar', [SearchController::class, 'caculateRatingStar']);
-Route::get('/shops', [SearchController::class, 'search']);
+Route::post('/getdistance', [HoanController::class, 'calculateDistance']);
+Route::get('/getallShop', [HoanController::class, 'allShop']);
+Route::post('/getratingstar', [HoanController::class, 'caculateRatingStar']);
+Route::get('/shops', [HoanController::class, 'search']);
 
+
+
+
+// NGUYỄN VĂN NHẬT
+Route::get('/shops', [NhatController::class, 'getshops']);
+Route::get('/shops/{shop_id}',[NhatController::class, 'getShopbyShopId']);
+Route::get('/service_shop_id/{shop_id}',[NhatController::class,'getServicesByShopId']);
+Route::get('/style/{shop_id}',[NhatController::class ,'getStylelistByShopId']);
+Route::get('/combo/{shop_id}',[NhatController::class,'getComboByShopId']);

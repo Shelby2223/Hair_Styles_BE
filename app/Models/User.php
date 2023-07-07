@@ -12,7 +12,14 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
     protected $primaryKey = 'user_id';
     public $incrementing = true;
-
+    public function shops()
+    {
+        return $this->hasMany(shop::class);
+    }
+    public function ratings()
+    {
+        return $this->hasMany(ratings::class);
+    }
     /**
      * The attributes that are mass assignable.
      *

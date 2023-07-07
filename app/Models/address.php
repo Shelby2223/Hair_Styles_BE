@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
-class histories extends Model
+class address extends Model
 {
     use HasFactory;
-    protected $table = "histories";
-    public function service()
+    protected $table= "services";
+    public function histories()
     {
-        return $this->belongsTo(services::class, 'service_id');
+        return $this->hasMany(histories::class, 'service_id');
     }
 }

@@ -9,9 +9,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Session;
 
-class AuthController extends Controller
+class TrungController extends Controller
 {
-
     public function register(Request $request)
     {
 
