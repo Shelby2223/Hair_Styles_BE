@@ -8,7 +8,7 @@ use App\Http\Controllers\TrungController;
 use App\Http\Controllers\ThoController;
 use App\Http\Controllers\HoanController;
 
-use App\Http\Controllers\HoanController;
+
 
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\SearchController;
