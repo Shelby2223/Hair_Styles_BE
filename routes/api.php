@@ -8,7 +8,10 @@ use App\Http\Controllers\TrungController;
 use App\Http\Controllers\ThoController;
 use App\Http\Controllers\HoanController;
 
+use App\Http\Controllers\HoanController;
 
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\SearchController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -81,18 +84,25 @@ Route::get('/tho/payment-redirect', [VNPayController::class, 'momo_payment'])->n
 
 
 // HOÀN BÙI
+
 //Booking
-Route::get('random-key', [BookingController::class, 'generateKey']);
-
-Route::get('/getservices', [BookingController::class, 'getShopServices']);
-
-Route::post('/bookingservices', [BookingController::class, 'booking']);
-
-
-Route::get('/getbookedstylists', [BookingController::class, 'checkStylistAvailability']);
+Route::get('random-key', [HoanController::class, 'generateKey']);
+Route::get('/getservices',[HoanController::class, 'getShopServices']);
+Route::post('/bookingservices',[HoanController::class, 'booking']);
+Route::post('/getbookedstylists', [HoanController::class, 'checkStylistAvailability']);
 
 
-// NGUYỄN VĂN NHẬT 
+
+//Search
+Route::post('/getdistance', [HoanController::class, 'calculateDistance']);
+Route::get('/getallShop', [HoanController::class, 'allShop']);
+Route::post('/getratingstar', [HoanController::class, 'caculateRatingStar']);
+Route::get('/shops', [HoanController::class, 'search']);
+
+
+
+
+// NGUYỄN VĂN NHẬT
 Route::get('/shops', [NhatController::class, 'getshops']);
 Route::get('/shops/{shop_id}',[NhatController::class, 'getShopbyShopId']);
 Route::get('/service_shop_id/{shop_id}',[NhatController::class,'getServicesByShopId']);
