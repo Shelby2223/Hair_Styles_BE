@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class address extends Model
 {
     use HasFactory;
-    protected $table= "services";
-    public function histories()
-    {
-        return $this->hasMany(histories::class, 'service_id');
-    }
+    protected $table = "addresses";
+
+    public function shop()
+{
+    return $this->belongsTo(shops::class, 'shop_id');
+}
 }
