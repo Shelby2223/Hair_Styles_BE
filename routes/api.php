@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ShopController;
 
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\SearchController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -70,4 +72,19 @@ Route::delete('shops/{id}', [ShopController::class, 'destroy']);
 // Route::put('histories/{id}', 'API\HistoryController@update');
 // Route::delete('histories/{id}', 'API\HistoryController@destroy');
 
+
+
+//Booking
+Route::get('random-key', [BookingController::class, 'generateKey']);
+Route::get('/getservices',[BookingController::class, 'getShopServices']);
+Route::post('/bookingservices',[BookingController::class, 'booking']);
+Route::post('/getbookedstylists', [BookingController::class, 'checkStylistAvailability']);
+
+
+
+//Search
+Route::post('/getdistance', [SearchController::class, 'calculateDistance']);
+Route::get('/getallShop', [SearchController::class, 'allShop']);
+Route::post('/getratingstar', [SearchController::class, 'caculateRatingStar']);
+Route::get('/shops', [SearchController::class, 'search']);
 
