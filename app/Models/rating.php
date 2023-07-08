@@ -11,14 +11,23 @@ class rating extends Model
     
     protected $table='ratings';
     protected $primaryKey = 'rating_id';
+   
+    protected $fillable = [
+        'rating_star',
+        'user_id',
+        'shop_id',
+        'content'
+    ];
 
 
 
-
+    
     public function users()
     {
         return $this->belongsTo(users::class);
     }
+
+    
     public function Shops()
     {
         return $this->belongsTo(shops::class);
