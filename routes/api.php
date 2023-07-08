@@ -44,9 +44,11 @@ Route::get('/users', [TrungController::class, 'getUsers']);
 Route::get('/users', [TamController::class, 'getUsers']);
 Route::get('/users/{users_id}', [TamController::class, 'getUsersId']);
 Route::put('/users/{id}', [TamController::class, 'update']);
+//Rating
+Route::post('/rating', [TamController::class, 'storeRating']);
+Route::get('/ratings/{shop_id}', [TamController::class, 'getRatingsWithUserNames']);
 
-
-// PAHN ĐỨC THƠ
+// PHAN ĐỨC THƠ
 Route::get('/is_user', [ThoController::class, 'getIsUser']);
 Route::put('/users/{id}', [ThoController::class, 'update']);
 
